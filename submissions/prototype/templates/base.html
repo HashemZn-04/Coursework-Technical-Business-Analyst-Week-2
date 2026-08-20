@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}Smart-Recovery Portal{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  {% if show_sidebar %}
+  <nav class="sidebar">
+    <div class="sidebar-brand">Smart-Recovery</div>
+    <a href="{{ url_for('account_summary') }}">Account Summary</a>
+    <a href="{{ url_for('promise_to_pay') }}">Promise-to-Pay</a>
+    <a href="{{ url_for('payment_plan_setup') }}">Payment Plan <span class="badge">Phase 2 preview</span></a>
+    <a href="{{ url_for('pay_upfront') }}">Pay Upfront</a>
+    <a href="{{ url_for('contact_agent') }}">Contact Agent</a>
+    <a href="{{ url_for('logout') }}" class="sidebar-logout">Logout</a>
+  </nav>
+  {% endif %}
+  <main class="content {% if show_sidebar %}with-sidebar{% endif %}">
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

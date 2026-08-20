@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Account Summary - Smart-Recovery Portal{% endblock %}
+{% block content %}
+<h1>Account Summary</h1>
+<p class="subtitle">Welcome back, {{ user.name }} ({{ user.account_ref }})</p>
+
+<div class="card">
+  <div class="stat-row">
+    <div class="stat"><span class="stat-label">Total balance</span><span class="stat-value">${{ "%.2f"|format(user.balance) }}</span></div>
+    <div class="stat"><span class="stat-label">Overdue amount</span><span class="stat-value">${{ "%.2f"|format(user.overdue_amount) }}</span></div>
+    <div class="stat"><span class="stat-label">Due date</span><span class="stat-value">{{ user.due_date }}</span></div>
+  </div>
+  <p><strong>Status:</strong> {{ user.delinquency_status }}</p>
+</div>
+
+<div class="card">
+  <h2>Payment history</h2>
+  {% if user.payment_history %}
+  <table>
+    <tr><th>Date</th><th>Amount</th><th>Method</th></tr>
+    {% for p in user.payment_history %}
+    <tr><td>{{ p.date }}</td><td>${{ "%.2f"|format(p.amount) }}</td><td>{{ p.method }}</td></tr>
+    {% endfor %}
+  </table>
+  {% else %}
+  <p>No payment history on file.</p>
+  {% endif %}
+</div>
+
+<div class="card">
+  <h2>Choose your next action</h2>
+  <div class="action-buttons">
+    <a class="btn-primary" href="{{ url_for('promise_to_pay') }}">Promise to Pay</a>
+    <a class="btn-primary" href="{{ url_for('payment_plan_setup') }}">Set Up a Payment Plan</a>
+    <a class="btn-primary" href="{{ url_for('pay_upfront') }}">Pay Upfront</a>
+    <a class="btn-secondary" href="{{ url_for('contact_agent') }}">Contact an Agent</a>
+  </div>
+</div>
+{% endblock %}

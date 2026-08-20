@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Routed to Agent - Smart-Recovery Portal{% endblock %}
+{% block content %}
+<div class="card centered">
+  <h1>Your Case Has Been Routed to an Agent</h1>
+
+  {% if reason == "verification_failed" %}
+  <p>We couldn't verify your identity through self-service. For your security, a collections agent will follow up with you directly.</p>
+  {% else %}
+  <p>This case requires agent review and isn't eligible for self-service at this time.</p>
+  {% endif %}
+
+  {% if user %}
+  <p><strong>Reference number:</strong> {{ user.account_ref }}</p>
+  <p class="next-steps">Your account context has been preserved, so you won't need to repeat any details when the agent contacts you.</p>
+  {% endif %}
+
+  <a class="btn-primary" href="{{ url_for('landing') }}">Return to Login</a>
+</div>
+{% endblock %}

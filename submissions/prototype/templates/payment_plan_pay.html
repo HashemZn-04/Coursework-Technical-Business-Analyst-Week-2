@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Confirm Payment Plan - Smart-Recovery Portal{% endblock %}
+{% block content %}
+<h1>Confirm Payment Plan <span class="badge">Phase 2 preview</span></h1>
+
+<div class="card">
+  <h2>Review</h2>
+  <p><strong>Installments:</strong> {{ installments }}</p>
+  <p><strong>Interval:</strong> {{ interval }}</p>
+  <p><strong>Total amount:</strong> ${{ "%.2f"|format(user.overdue_amount) }}</p>
+
+  <form method="post">
+    <label for="bank_account">Pay from</label>
+    <select id="bank_account" name="bank_account" required>
+      {% for acc in bank_accounts %}
+      <option value="{{ acc.id }}">{{ acc.label }}</option>
+      {% endfor %}
+    </select>
+
+    <div class="action-buttons">
+      <button type="submit" class="btn-primary">Confirm Plan</button>
+      <a class="btn-secondary" href="{{ url_for('payment_plan_setup') }}">Back</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

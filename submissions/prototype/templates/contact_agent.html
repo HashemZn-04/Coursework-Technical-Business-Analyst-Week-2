@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Contact Agent - Smart-Recovery Portal{% endblock %}
+{% block content %}
+<h1>Contact an Agent</h1>
+<p class="subtitle">Speak with a collections agent for account {{ user.account_ref }}.</p>
+
+<div class="card">
+  <ul class="contact-list">
+    <li><strong>General inquiries:</strong> <a href="tel:+18005550100">1-800-555-0100</a></li>
+    <li><strong>Debt assistance:</strong> <a href="tel:+18005550101">1-800-555-0101</a></li>
+    <li><strong>Dispute / hardship:</strong> <a href="tel:+18005550102">1-800-555-0102</a></li>
+  </ul>
+  <a class="btn-secondary" href="{{ url_for('account_summary') }}">Back to Account Summary</a>
+</div>
+{% endblock %}

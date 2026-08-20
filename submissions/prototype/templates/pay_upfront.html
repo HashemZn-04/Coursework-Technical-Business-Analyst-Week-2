@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Pay Upfront - Smart-Recovery Portal{% endblock %}
+{% block content %}
+<h1>Pay Upfront</h1>
+<p class="subtitle">Pay your full overdue amount now.</p>
+
+<div class="card">
+  <p><strong>Amount due:</strong> ${{ "%.2f"|format(user.overdue_amount) }}</p>
+
+  <form method="post">
+    <label for="bank_account">Pay from</label>
+    <select id="bank_account" name="bank_account" required>
+      {% for acc in bank_accounts %}
+      <option value="{{ acc.id }}">{{ acc.label }}</option>
+      {% endfor %}
+    </select>
+
+    <div class="action-buttons">
+      <button type="submit" class="btn-primary">Pay ${{ "%.2f"|format(user.overdue_amount) }}</button>
+      <a class="btn-secondary" href="{{ url_for('account_summary') }}">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

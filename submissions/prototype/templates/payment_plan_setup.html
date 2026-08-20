@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Payment Plan - Smart-Recovery Portal{% endblock %}
+{% block content %}
+<h1>Set Up a Payment Plan <span class="badge">Phase 2 preview</span></h1>
+<p class="subtitle">Split ${{ "%.2f"|format(user.overdue_amount) }} into manageable installments.</p>
+<p class="next-steps">Not part of the approved Phase 1 scope (OPP-04 is excluded) — shown here as a Phase 2 preview only.</p>
+
+<div class="card">
+  <form method="post">
+    <label for="installments">Number of installments</label>
+    <select id="installments" name="installments" required>
+      <option value="2">2</option>
+      <option value="3" selected>3</option>
+      <option value="6">6</option>
+      <option value="12">12</option>
+    </select>
+
+    <label for="interval">Interval</label>
+    <select id="interval" name="interval" required>
+      <option value="weekly">Weekly</option>
+      <option value="biweekly">Biweekly</option>
+      <option value="monthly" selected>Monthly</option>
+    </select>
+
+    <div class="action-buttons">
+      <button type="submit" class="btn-primary">Continue</button>
+      <a class="btn-secondary" href="{{ url_for('account_summary') }}">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
