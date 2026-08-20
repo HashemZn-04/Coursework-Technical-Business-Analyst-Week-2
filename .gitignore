@@ -10,7 +10,6 @@ Thumbs.db
 *.bak
 
 # Export artifacts
-*.png
 *.jpg
 *.jpeg
 *.pdf
@@ -18,3 +17,9 @@ Thumbs.db
 # Tool settings
 .vscode/
 .idea/
+
+# Prototype (Flask)
+submissions/prototype/.venv/
+submissions/prototype/__pycache__/
+**/__pycache__/
+*.pyc

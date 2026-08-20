@@ -1,0 +1,256 @@
+Summary,Priority,Reporter,Description,Parent summary
+"US-01: Customer opening the self-service portal session","Highest","Hashem Znati","h3. User story
+
+As a customer that's routed to self-service, I want to open a portal session, so that I can view and act on my account without calling an agent
+
+h3. Business value
+
+Enables the ~40% self-service scope claimed for OPP-02
+
+h3. Acceptance criteria
+
+Session starts only if the eligibility routing confirms self-service and the session has a unique reference linked to the account. Lastly, idle sessions trigger the abandonment exception.
+
+h3. Dependencies 
+
+US-10 (Eligibility Routing)","Access and verification"
+"US-02: Verify customer identity using SMS/email","Highest","Hashem Znati","h3. Story
+
+As a customer, I want to verify my identity using a one-time code sent by SMS or email, so that my account information stays protected.
+
+h3. Business value
+
+Required precondition for OPP-02 and linked to Daniel's audit/compliance concern.
+
+h3. Acceptance criteria
+
+The code is single-use and time-limited; account/balance data is hidden until verification succeeds; verification result is logged with a timestamp.
+
+h3. Dependencies
+
+US-01","Access and verification"
+"US-03: Confirm the existing authorisation system integration for identity verification","High","Hashem Znati","h3. Story
+
+As the delivery team, we want confirmation of whether SMS/email verification integrates with an existing customer authentication system or needs a new build, so that estimation and design are accurate.
+
+h3. Business value
+
+Prevents a late-discovered integration blocker on the critical path to OPP-02.
+
+h3. Acceptance criteria
+
+IT/Security confirms integration approach in writing; outcome is documented before US-02 development starts; no code is written against an unconfirmed assumption.
+
+h3. Dependencies
+
+None","Access and verification"
+"US-04: Consolidate unified user profile","Highest","Hashem Znati","h3. Story
+
+As the Portal System, I want to consolidate legacy DB, spreadsheet, and email records into a single unified customer record, so that every downstream feature reads consistent, trustworthy data.
+
+h3. Business value
+
+OPP-01 — highest-ranked, positive base-case ROI opportunity, it also de-risks all other Phase 1 stories.
+
+h3. Acceptance criteria
+
+The record includes balance, history, and status from all three sources; conflicting values resolve per the agreed governance rule (e.g., legacy DB wins); record updates automatically whenever a portal or agent action occurs.
+
+h3. Dependencies
+
+US-05","Account visibility"
+"US-05: Agree on data governance and conflict resolution rules","Highest","Hashem Znati","h3. Story
+
+As Operations and Finance, we want an agreed rule for which data source wins when the legacy DB, spreadsheet, and email disagree, so that the unified record is trustworthy from day one.
+
+h3. Business value
+
+Precondition for US-04; addresses SN-037's ""scattered systems"" pain point properly rather than superficially.
+
+h3. Acceptance criteria
+
+a single documented rule set exists and is signed off by Operations and Finance; the rule is testable (i.e., a QA tester can verify a conflict resolves as documented).
+
+h3. Dependencies
+
+None","Account visibility"
+"US-06: Display account summary","Low","Hashem Znati","h3. Story
+
+As a verified customer, I want to see my balance, due date, and payment history, so that I understand what I owe without calling an agent.
+
+h3. Business value
+
+Directly answers SN-001 and SN-002.
+
+h3. Acceptance criteria
+
+The summary reflects the unified record in real time; a fallback message appears if data is temporarily unavailable rather than showing blank/incorrect figures; communication history is visible and read-only.
+
+h3. Dependencies
+
+US-02 and US-04","Account visibility"
+"US-07: Present the available self-service actions","High","Hashem Znati","h3. Story
+
+As a verified customer, I want to choose between making a manual payment or capturing a promise to pay, so that I can resolve my case in the way that suits me.
+
+h3. Business value
+
+Core self-service decision point supporting OPP-02's time-savings case.
+
+h3. Acceptance criteria
+
+Only manual payment and promise-to-pay options are offered, therefore no payment-plan selection option is shown (out of scope); an idle timeout on this screen triggers abandonment logging (US-12).
+
+h3. Dependencies
+
+US-06","Promise-to-Pay Journey"
+"US-08: Process manual payment","Medium","Hashem Znati","h3. Story
+
+As a customer, I want to make a one-off manual payment through the portal, so that I can resolve my balance without agent involvement.
+
+h3. Business value
+
+Directly reduces agent call volume (part of OPP-02's 8–14 min/case saved).
+
+h3. Acceptance criteria
+
+Payment amount and method are validated before submission; a confirmation is shown on success; a failed payment routes the customer back to the action screen (US-07), not to a dead end.
+
+h3. Dependencies
+
+US-07","Promise-to-Pay Journey"
+"US-09: Capture the promise-to-pay details","Medium","Hashem Znati","h3. Story
+
+As a customer, I want to submit a promised payment date and amount, so that I can confirm my commitment without an agent call.
+
+h3. Business value
+
+Addresses SN-045/SN-112; the capture-only half of OPP-05 that Gareth specifically asked for.
+
+h3. Acceptance criteria
+
+Promised date must be in the future; promised amount must be greater than zero; no automated escalation timer is triggered on submission (that half of OPP-05 is out of scope); confirmation is shown to the customer.
+
+h3. Dependencies
+
+US-07","Promise-to-Pay Journey"
+"US-10: Record the self-service outcome to the unified record and communication logs","Low","Hashem Znati","h3. Story
+
+As the Portal System, I want every self-service action (payment or promise) written back to the unified customer record and communication log in one call, so that agents and reporting always see the latest status.
+
+h3. Business value
+
+OPP-03 — positive base-case ROI; eliminates manual re-entry (SN-038).
+
+h3. Acceptance criteria
+
+The recording happens automatically immediately after US-08 or US-09 completes; write updates both the unified record and the audit log in a single transaction; failure to write is retried or flagged, never silently dropped.
+
+h3. Dependencies
+
+US-04, US-08, US-09","Promise-to-Pay Journey"
+"US-11: Route the ineligible cases to an agent","High","Hashem Znati","h3. Story
+
+As the Portal System, I want to check whether an account is eligible for self-service before opening a portal session, so that unsuitable cases go straight to an agent instead of a confusing self-service journey.
+
+h3. Business value
+
+Protects Amina's requirement that straightforward and complex cases aren't tangled together.
+
+h3. Acceptance criteria
+
+An eligibility check runs immediately after the unified record is created (A2); ineligible cases are routed to the agent queue with the reason attached; the check does not apply payment-plan eligibility logic (out of scope).
+
+h3. Dependencies
+
+US-04","Routing and Exception handling"
+"US-12: Handle the failed identity verification","Low","Hashem Znati","h3. Story
+
+As a customer who fails identity verification, I want a clear retry path and an eventual handoff to an agent, so that I'm not stuck with no way forward.
+
+h3. Business value
+
+Prevents silent drop-off on a critical-path feature (identity verification blocks all self-service).
+
+h3. Acceptance criteria
+
+The failed attempts are counted; up to a defined retry limit (e.g., 3) the customer can retry; beyond the limit the case routes to an agent with a note that self-service verification failed.
+
+h3. Dependencies
+
+US-02","Routing and Exception handling"
+"US-13: Detect and log the customer abandonment","High","Hashem Znati","h3. Story
+
+As the Portal System Manager, I want to detect when a customer leaves a session idle beyond a defined threshold, so that the case can be followed up appropriately instead of silently disappearing.
+
+h3. Business value
+
+Prevents cases from being lost between self-service and agent-led handling; supports honest reporting on portal effectiveness.
+
+h3. Acceptance criteria
+
+The idle threshold (e.g., 10 minutes) is configurable; abandonment is logged with the last screen viewed; abandoned cases are flagged for optional agent follow-up, not automatically escalated.
+
+h3. Dependencies
+
+US-01","Routing and Exception handling"
+"US-14: Agent reviews the preloaded unified profile during handoff","Medium","Hashem Znati","h3. Story
+
+As a Collections Agent, I want the full unified customer profile pre-loaded when a case is routed to me, so that I don't need to ask the customer to repeat information already given.
+
+h3. Business value
+
+Directly addresses SN-037 (first-contact context); preserves agent context on every handoff type (ineligible routing, failed verification, abandonment).
+
+h3. Acceptance criteria
+
+The profile includes communication history, payment history, and any self-service actions already attempted; no manual lookup step exists in the agent's task; profile is identical regardless of which exception path (US-11, US-12, US-13) triggered the handoff.
+
+h3. Dependencies
+
+US-04, US-10","Routing and Exception handling"
+"US-15: Escalate hardships, dispute and/or legal cases to specialist processes","Lowest","Hashem Znati","h3. Story
+
+As a Collections Agent, I want to escalate a case to the appropriate specialist process with full context attached, so that the specialist doesn't start from scratch.
+
+h3. Business value
+
+Keeps high-risk/complex cases out of automation per Amina's segmentation principle, without losing context on handoff.
+
+h3. Acceptance criteria
+
+The escalation sends the full unified record and escalation reason; the receiving process is referenced but not built as part of this story (out of scope); the case is marked ""on hold — specialist owns"" in the unified record.
+
+h3. Dependencies
+
+US-04, US-14","Routing and Exception handling"
+"US-16: Log the agent-led outcomes automatically","Low","Hashem Znati","h3. Story
+
+As a Collections Agent, I want my contact outcome logged automatically to the unified record after I select it, so that I don't need to re-key it into multiple systems.
+
+h3. Business value
+
+OPP-03 — same positive-ROI logging mechanism as US-10, applied to the agent-led path.
+
+h3. Acceptance criteria
+
+The outcome codes are structured (no free text); a single save action updates the unified record and audit log; no duplicate entry is required in any other system.
+
+h3. Dependencies
+
+US-04, US-14","Reporting and Audit trail"
+"US-17: Provide real-time status visibility for operations managers","Medium","Hashem Znati","h3. Story
+
+As an Operations Manager, I want to view live case status on demand, so that I no longer need to run a weekly manual reconciliation.
+
+h3. Business value
+
+Directly resolves SN-122/SN-085 (inconsistent status codes) and the ""manual status reconciliation"" pain point (Part 3); delivers the ""clearer reporting"" measurable outcome.
+
+h3. Acceptance criteria
+
+The dashboard reads live from the same unified record/communication log that US-10 and US-16 write to; status codes are standardized (no per-agent variation); no scheduled batch/reconciliation job is required to see current status.
+
+h3. Dependencies
+
+US-04, US-10, US-16","Reporting and Audit trail"
