@@ -1,7 +1,11 @@
 # Coursework Technical Business Analyst Week 2
 Hashem Znati
 
+## Executive Briefing
+[Click here to view or download slides](<./Smart-Recovery Phase 1 Executive Briefing.pptx.pptx>)
 
+
+[Click to watch recording](<https://drive.google.com/file/d/1sAkGAVxZQQfidBQU2772XsXaGFU9mrov/view?usp=sharing>)
 ## ADKAR Assessment
 [Click here to view table](<./ADKAR Assessment (Legacy Trust).xlsx>)
 
